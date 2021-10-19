@@ -33,7 +33,14 @@ async function connectToDatabase() {
 
 async function createGroup(data) {
     const { db } = await connectToDatabase();
-    const response = db.collection('groups').insertOne(data);
+    const add = db.collection('groups').insertOne(data);
+    const response = db.collection('groups').findOne(
+        { email: data.email },
+        {projection: {
+            _id: 1
+        }
+    })
+    return response;
 }
 
 const PORT = process.env.PORT || 3001;
@@ -42,8 +49,8 @@ const app = express();
 app.use(express.json());
 
 app.post("/group-register", async (req, res) => { 
-    await createGroup(req.body);
-    res.json({ hello: "SUh, dude!" })
+    const groupId = await createGroup(req.body);
+    res.json({ groupId: groupId })
 })
 
 app.listen(PORT, () => {
