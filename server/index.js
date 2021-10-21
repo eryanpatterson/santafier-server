@@ -1,47 +1,10 @@
-const { MongoClient } = require("mongodb");
 const express = require("express");
-const bodyParser = require('body-parser');
+const facebookStrategy = require("./auth");
+const passport = require("passport");
+const sendEmail = require("./mailer");
+const { createGroup, addUser, countGroup } = require("./functions");
 require('dotenv').config('../.env.local');
 
-const MONGO_DB = process.env.MONGO_DB;
-const MONGO_URI = process.env.MONGO_URI;
-
-let cached = global.mongo;
-
-if (!cached) {
-    cached = global.mongo = { conn: null, promise: null }
-}
-
-async function connectToDatabase() {
-    if (cached.conn) {
-        return cached.conn
-    }
-
-    if (!cached.promise) {
-    
-        cached.promise = MongoClient.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-        .then((client) => {
-            return {
-                client,
-                db: client.db(MONGO_DB),
-            }
-        })
-    }
-    cached.conn = await cached.promise
-    return cached.conn
-}
-
-async function createGroup(data) {
-    const { db } = await connectToDatabase();
-    const add = db.collection('groups').insertOne(data);
-    const response = db.collection('groups').findOne(
-        { email: data.email },
-        {projection: {
-            _id: 1
-        }
-    })
-    return response;
-}
 
 const PORT = process.env.PORT || 3001;
 
@@ -52,6 +15,27 @@ app.post("/group-register", async (req, res) => {
     const groupId = await createGroup(req.body);
     res.json({ groupId: groupId })
 })
+
+passport.use(facebookStrategy);
+
+app.get('/auth/facebook', async (req, res) => {
+    passport.authenticate('facebook', { scope: 
+    [
+        'email', 'public_profile',    
+    ]});
+    res.json({ message: 'hello'});
+});
+app.get('/auth/facebook/callback',
+    passport.authenticate('facebook', { failureRedirect: '/register' }),
+    function(req,res) {
+        res.redirect('/');
+    });
+
+app.post('/user-add', async (req, res) => {
+    await addUser(req.body);
+    countGroup(req.body);
+})
+
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
