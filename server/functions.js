@@ -1,35 +1,5 @@
-const { MongoClient, ObjectId } = require("mongodb");
 const { sendEmail } = require("./mailer");
 require('dotenv').config('../.env.local');
-
-
-const MONGO_DB = process.env.MONGO_DB;
-const MONGO_URI = process.env.MONGO_URI;
-
-let cached = global.mongo;
-
-if (!cached) {
-    cached = global.mongo = { conn: null, promise: null }
-}
-
-async function connectToDatabase() {
-    if (cached.conn) {
-        return cached.conn
-    }
-
-    if (!cached.promise) {
-    
-        cached.promise = MongoClient.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-        .then((client) => {
-            return {
-                client,
-                db: client.db(MONGO_DB),
-            }
-        })
-    }
-    cached.conn = await cached.promise
-    return cached.conn
-}
 
 async function createGroup(data) {
     const { db } = await connectToDatabase();
@@ -88,8 +58,14 @@ async function countGroup(data) {
     }
 }
 
+async function getMessage(db) {
+    const messages = db.collection('messages').find({}).toArray();
+    return messages;
+}
+
 module.exports = {
     createGroup,
     addUser,
-    countGroup
+    countGroup,
+    getMessage
 }
