@@ -1,9 +1,6 @@
 const express = require("express");
-const facebookStrategy = require("./auth");
-const passport = require("passport");
-const group = require("../lib/group");
-const { createGroup, addUser, countGroup, getMessage } = require("./functions");
-const connectToDatabase = require('../utils/mongodb')
+const jwt = require('jsonwebtoken');
+const { group, verify, address } = require("../lib/mongoose");
 require('dotenv').config('../.env.local');
 
 const PORT = process.env.PORT || 3001;
@@ -12,27 +9,43 @@ const app = express();
 app.use(express.json());
 
 app.post("/group-register", async (req, res) => { 
-    const groupId = await group(req.body);
-    res.json({ groupId: groupId })
-})
+    try {
+        await group(req.body);
+        res.status(200).send();
+    } catch {
+        res.status(400);
+    }
+});
 
-passport.use(facebookStrategy);
-
-app.get('/auth/facebook',
-    passport.authenticate('facebook', {
-        scope: ['email']
-    }));
-app.get('/auth/facebook/callback',
-    passport.authenticate('facebook', { failureRedirect: 'http://google.com' }),
-    function(req, res) {
-        res.redirect('http://localhost:3000/');
+app.post("/verify-email", authenticateToken, async (req, res) => {
+    const member = req.member;
+    console.log(member.name);
+    try {
+        await verify(member);
+    } catch {
+        res.sendStatus(403)
+    }
+    const token = jwt.sign(member, process.env.TOKEN_SECRET);
+    res.json({
+        token: token
     });
-
-
-app.get('/test', async (req, res) => {
-    const message = connectToDatabase(getMessage);
-    res.status(200).send(message)
 })
+
+app.post("/address", authenticateToken, async (req, res) => {
+    address(req.member, req.body.address);
+
+})
+
+function authenticateToken(req, res, next) {
+    const token = req.body.token;
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, member) => {
+        if (err) return res.sendStatus(403)
+        req.member = member
+        next()
+    })
+};
+
+
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`);
