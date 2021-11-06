@@ -1,0 +1,19 @@
+POST http://localhost:3001/group-register
+Content-Type: application/json
+
+{
+    "group": {
+        "name": "Boomers",
+        "admin": "Jimbob",
+        "adminEmail": "blah@mail",
+        "pwd": "blahblah222"
+    },
+    "members": [
+        {
+            "name": "Billy"
+        },
+        {
+            "name": "Sue"
+        }
+    ]
+}
