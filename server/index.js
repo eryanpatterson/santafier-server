@@ -3,12 +3,12 @@ const jwt = require('jsonwebtoken');
 const { group, verify, address, checkToken, deleteToken, checkGroup, createAddressToken } = require("../lib/mongoose");
 require('dotenv').config('../.env.local');
 
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use(express.json());
 
-app.post("/group-register", async (req, res) => { 
+app.post("/api/group-register", async (req, res) => { 
     try {
         await group(req.body);
         res.status(200).send({message: "Hello"});
@@ -17,7 +17,7 @@ app.post("/group-register", async (req, res) => {
     }
 });
 
-app.post("/verify-email", authenticateVerificationToken, async (req, res) => {
+app.post("/api/verify-email", authenticateVerificationToken, async (req, res) => {
     const member = req.member;
     try {
         await verify(member);
@@ -31,7 +31,7 @@ app.post("/verify-email", authenticateVerificationToken, async (req, res) => {
     });
 })
 
-app.post("/address", authenticateAddressToken, async (req, res) => {  
+app.post("/api/address", authenticateAddressToken, async (req, res) => {  
     
     try {
         await address(req.member, req.body.address);
