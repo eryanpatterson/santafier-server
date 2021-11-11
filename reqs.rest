@@ -1,4 +1,4 @@
-POST http://secretsantafier.com/api/group-register
+POST https://secretsantafier.com/api/group-register
 Content-Type: application/json
 
 {
