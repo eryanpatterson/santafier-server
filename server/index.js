@@ -1,6 +1,6 @@
 const express = require("express");
 const jwt = require('jsonwebtoken');
-const { group, verify, address, checkToken, deleteToken } = require("../lib/mongoose");
+const { group, verify, address, checkToken, deleteToken, checkGroup, createAddressToken } = require("../lib/mongoose");
 require('dotenv').config('../.env.local');
 
 const PORT = process.env.PORT || 3001;
@@ -9,7 +9,6 @@ const app = express();
 app.use(express.json());
 
 app.post("/group-register", async (req, res) => { 
-    console.log(req.body)
     try {
         await group(req.body);
         res.status(200).send({message: "Hello"});
@@ -26,7 +25,7 @@ app.post("/verify-email", authenticateVerificationToken, async (req, res) => {
         res.sendStatus(403)
     }
     await deleteToken(req.body.token);
-    const token = jwt.sign(member, process.env.ADDRESS_TOKEN_SECRET);
+    const token = await createAddressToken(member);
     res.status(200).send({
         token: token
     });
@@ -36,6 +35,7 @@ app.post("/address", authenticateAddressToken, async (req, res) => {
     
     try {
         await address(req.member, req.body.address);
+        await checkGroup(req.member);
         await deleteToken(req.body.token);
         res.sendStatus(200);
     } catch {
@@ -58,9 +58,8 @@ async function authenticateVerificationToken(req, res, next) {
 };
 
 async function authenticateAddressToken(req, res, next) {
-    const token = req.body.token;
+    const token = req.body.token.token;
     const check = await checkToken(token);
-    console.log(check);
     if (!check) return res.sendStatus(403);
     jwt.verify(token, process.env.ADDRESS_TOKEN_SECRET, (err, member) => {
         if (err) return res.sendStatus(403)

@@ -1,4 +1,4 @@
-POST http://localhost:3001/group-register
+POST http://secretsantafier.com/api/group-register
 Content-Type: application/json
 
 {
@@ -10,10 +10,12 @@ Content-Type: application/json
     },
     "members": [
         {
-            "name": "Billy"
+            "name": "Billy",
+            "email": "eryanpatterson@gmail.com"
         },
         {
-            "name": "Sue"
+            "name": "Sue",
+            "email": "eryanpatterson@gmail.com"
         }
     ]
 }
