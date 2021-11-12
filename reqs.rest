@@ -31,5 +31,14 @@ POST https://secretsantafier.com/api/verify-email
 Content-Type: application/json
 
 {
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVGFyaXEiLCJlbWFpbCI6ImVyeWFucGF0dGVyc29uQGdtYWlsLmNvbSIsInZlcmlmaWVkIjpmYWxzZSwiX2lkIjoiNjE4ZWEyOGFjYmUwMTY3NjZmZjcyOGI5IiwiaWF0IjoxNjM2NzM3Njc0fQ.JDs1K8Q_aPw34DW-yk5cU1dswfXC9bVzXQdWXlFpMkc"
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVGFiaXRoYSIsImVtYWlsIjoiZXJ5YW5wYXR0ZXJzb25AZ21haWwuY29tIiwidmVyaWZpZWQiOmZhbHNlLCJfaWQiOiI2MThlYTYwMzRkNmUxNmEwZWMyYmY1NGIiLCJpYXQiOjE2MzY3Mzg1NjN9.22QYh34_WKPAduQZAOTQCUSH31kFzwRbAgv78hfnLsg"
+}
+###
+
+POST https://secretsantafier.com/api/address
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiVGFiaXRoYSIsImVtYWlsIjoiZXJ5YW5wYXR0ZXJzb25AZ21haWwuY29tIiwidmVyaWZpZWQiOmZhbHNlLCJfaWQiOiI2MThlYTYwMzRkNmUxNmEwZWMyYmY1NGIiLCJpYXQiOjE2MzY3Mzg1NjN9.lzOQDmowjjy2LhbvWadI6Ir6q3-3s-tD9FyqU3h7jAs",
+    "address": "123 Golly Gee Lane"
 }

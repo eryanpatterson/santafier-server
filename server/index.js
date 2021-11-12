@@ -1,5 +1,6 @@
 const express = require("express");
 const jwt = require('jsonwebtoken');
+const path = require('path')
 const { group, verify, address, checkToken, deleteToken, checkGroup, createAddressToken } = require("../lib/mongoose");
 require('dotenv').config('../.env.local');
 
@@ -7,6 +8,8 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, "../../secret-santafier", "build")));
 
 app.post("/api/group-register", async (req, res) => { 
     try {
@@ -43,7 +46,11 @@ app.post("/api/address", authenticateAddressToken, async (req, res) => {
     }
     
 
-})
+});
+
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, "../../secret-santafier/", "build/index.html"));
+});
 
 async function authenticateVerificationToken(req, res, next) {
     const token = req.body.token;
