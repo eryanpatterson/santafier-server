@@ -53,7 +53,7 @@ app.get('*', (req, res) => {
 });
 
 async function authenticateVerificationToken(req, res, next) {
-    const token = req.body.token;
+    const token = await req.body.token;
     console.log(token);
     const check = await checkToken(token);
     
