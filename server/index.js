@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname, "../../secret-santafier", "build")));
+app.use(express.static(path.join(__dirname, "..", "front-end")));
 
 app.post("/api/group-register", async (req, res) => { 
     try {
@@ -49,7 +49,7 @@ app.post("/api/address", authenticateAddressToken, async (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, "../../secret-santafier/", "build/index.html"));
+    res.sendFile(path.join(__dirname, "..", "front-end/index.html"));
 });
 
 async function authenticateVerificationToken(req, res, next) {
