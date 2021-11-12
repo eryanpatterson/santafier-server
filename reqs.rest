@@ -3,19 +3,24 @@ Content-Type: application/json
 
 {
     "group": {
-        "name": "Boomers",
-        "admin": "Jimbob",
+        "name": "The Taters",
+        "admin": "Bob Evans",
         "adminEmail": "blah@mail",
-        "pwd": "blahblah222"
+        "exchangeDate": "Dec, 2 2021",
+        "spendLimit": 52
     },
     "members": [
         {
-            "name": "Billy",
+            "name": "Tabitha",
             "email": "eryanpatterson@gmail.com"
         },
         {
-            "name": "Sue",
+            "name": "Tariq",
             "email": "eryanpatterson@gmail.com"
+        },
+        {   
+            "name": "Manfreda",
+            "email": "raekpatterson@gmail.com"
         }
     ]
 }
