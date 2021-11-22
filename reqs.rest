@@ -3,11 +3,12 @@ Content-Type: application/json
 
 {
     "group": {
-        "name": "The Taters",
+        "name": "The Tater",
         "admin": "Bob Evans",
         "adminEmail": "blah@mail",
         "exchangeDate": "Dec, 2 2021",
-        "spendLimit": 52
+        "spendLimit": 52, 
+        "useAddress": false
     },
     "members": [
         {
