@@ -28,6 +28,7 @@ app.post("/api/verify-email", authenticateVerificationToken, async (req, res) =>
         res.sendStatus(403)
     }
     await deleteToken(req.body.token);
+    await checkGroup(req.member);
     const token = await createAddressToken(member);
     res.status(200).send({
         token: token
