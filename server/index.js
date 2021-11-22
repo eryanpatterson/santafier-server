@@ -16,7 +16,7 @@ app.post("/api/group-register", async (req, res) => {
         await group(req.body);
         res.status(200).send({message: "Hello"});
     } catch (err) {
-        res.status(400).send({error: err});
+        res.status(400).send({message: err});
     }
 });
 
