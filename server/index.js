@@ -15,8 +15,8 @@ app.post("/api/group-register", async (req, res) => {
     try {
         await group(req.body);
         res.status(200).send({message: "Hello"});
-    } catch {
-        res.status(400);
+    } catch (err) {
+        res.status(400).send({error: err});
     }
 });
 
@@ -29,10 +29,14 @@ app.post("/api/verify-email", authenticateVerificationToken, async (req, res) =>
     }
     await deleteToken(req.body.token);
     await checkGroup(req.member);
-    const token = await createAddressToken(member);
-    res.status(200).send({
-        token: token
-    });
+    if (member.useAddress) {
+        const token = await createAddressToken(member);
+        res.status(200).send({
+            token: token
+        });
+    }
+    
+    res.status(200)
 })
 
 app.post("/api/address", authenticateAddressToken, async (req, res) => {  
