@@ -55,7 +55,7 @@ app.get('*', (req, res) => {
 
 async function authenticateVerificationToken(req, res, next) {
     const token = await req.body.token;
-    console.log(token);
+
     const check = await checkToken(token);
     
     if (!check) return res.sendStatus(403);
